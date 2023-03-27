@@ -60,67 +60,80 @@ export default function Dashboard() {
   const memoizedAllUsers = useMemo(() => allUsers, [allUsers]);
 
   return (
-    <div>
+    <div className="dashboard-container">
+      <h1>Dashboard</h1>
       {errorMsg && (
-        <div className="bg-warn text-danger alert alert-danger">{errorMsg}</div>
+        <div className="alert alert-danger" role="alert">
+          {errorMsg}
+        </div>
       )}
-      <h1 className="Contianer">Dashboard</h1>
 
-      <div className="container">
-        <div className="col-md-12 border border-1 border-green py-5 my-5">
-          <Link
-            className="btn btn-lg btn-primary"
-            to={"../register?redirect=add"}
-          >
-            Add User
-          </Link>
+      <div className="row mb-3">
+        <div className="col-12 col-md-6 mb-2 mb-md-0">
+          <div className="card h-100">
+            <div className="card-body d-flex flex-column justify-content-center align-items-center">
+              <h5 className="card-title mb-4">Add User</h5>
+              <Link to="../register?redirect=add" className="btn btn-primary">
+                Add User
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-md-6">
+          <div className="card h-100">
+            <div className="card-body d-flex flex-column justify-content-center align-items-center">
+              <h5 className="card-title mb-4">Profile</h5>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  navigate("/profile");
+                }}
+              >
+                Profile
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <button
-        className="btn btn-lg  btn-primary"
-        onClick={() => {
-          navigate("/profile");
-        }}
-      >
-        {" "}
-        Your Profile
-      </button>
-      <div className="container">
-        <header className="table-title align-start"> All users</header>
-        <div className="row">
-          <div className="col-12">
-            <table className="table table-bordered">
+
+      <div className="card">
+        <div className="card-header">
+          <h5 className="card-title mb-0">All Users</h5>
+        </div>
+        <div className="card-body">
+          <div className="table-responsive">
+            <table className="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Actions</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {memoizedAllUsers &&
-                  memoizedAllUsers?.map((user, key) => {
-                    return (
-                      <tr key={key}>
-                        <th scope="row">{user?.name}</th>
-                        <td>{user?.email} </td>
-                        <td>{user?.phone}</td>
-                        <td>{user?.role}</td>
-                        <td>
-                          {" "}
-                          <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => toggleBlockStatus(user._id)}
-                          >
-                            {user?.isBlocked ? "Unblock" : "Block"}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  memoizedAllUsers.map((user) => (
+                    <tr key={user._id}>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.role}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className={`btn ${
+                            user.isBlocked ? "btn-danger" : "btn-success"
+                          }`}
+                          onClick={() => toggleBlockStatus(user._id)}
+                        >
+                          {user.isBlocked ? "Unblock" : "Block"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
